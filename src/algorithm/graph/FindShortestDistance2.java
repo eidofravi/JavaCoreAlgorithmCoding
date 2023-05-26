@@ -16,7 +16,6 @@ public class FindShortestDistance2 {
         int arr[][] = {{10, 20, 30, 100},{40, 50, 60, 110},{70, 80, 90, 120}};
         Node root =BuildNodes.buildNodes(arr);
         long L1 = System.currentTimeMillis();
-        //System.out.println(findPath(root, new HashMap()));
         System.out.println(shortestPath(root));
         long L2 = System.currentTimeMillis();
         System.out.println("time taken " + (L2 - L1));
