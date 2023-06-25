@@ -8,13 +8,10 @@ public class ReorderSpaces {
     }
     
     
-    
     public static String reorderSpaces(String text) {
-        
         if (null == text || text.length() == 1) {
             return text;
         }
-        
         int i = 0 ;
         int spCount = 0;
         int wCount = 0;
@@ -24,7 +21,6 @@ public class ReorderSpaces {
             if (ch == ' ') {
                 spCount++;
             }
-            
             if ((i !=0 && text.charAt(i-1) == ' ' && text.charAt(i) != ' ')
                 || (i == 0 && text.charAt(i) != ' ')){
                 wCount++;
