@@ -30,27 +30,24 @@ public class _310MinimumHeightTree {
             List<Integer> list2 = map.computeIfAbsent(edge[1], t -> new ArrayList<>());
             list2.add(edge[0]);
         }
-        Queue<Integer> queue = new LinkedList();
+        List<Integer> leafs = new ArrayList<>();
         for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
             if (entry.getValue().size() == 1) {
-                queue.add(entry.getKey());
+                leafs.add(entry.getKey());
             }
         }
         while (map.size() > 2) {
-            List<Integer> listQueue = new ArrayList<>();
-            while (!queue.isEmpty()) {
-                Integer key = queue.poll();
-                Integer val = map.get(key).get(0);
-                map.remove(key);
+            List<Integer> newLeaf = new ArrayList<>();
+            for (Integer leaf : leafs) {
+                Integer val = map.get(leaf).get(0);
+                map.remove(leaf);
                 List<Integer> list = map.get(val);
-                list.remove(key);
+                list.remove(leaf);
                 if (list.size() == 1) {
-                    listQueue.add(val);
+                    newLeaf.add(val);
                 }
             }
-            for (Integer queue1 : listQueue) {
-                queue.add(queue1);
-            }
+            leafs = newLeaf;
         }
         return new ArrayList<>(map.keySet());
     }
