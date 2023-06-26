@@ -1,6 +1,7 @@
 package leetcode.graph;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class _310MinimumHeightTree {
 
@@ -29,40 +30,28 @@ public class _310MinimumHeightTree {
             List<Integer> list2 = map.computeIfAbsent(edge[1], t -> new ArrayList<>());
             list2.add(edge[0]);
         }
-        Map<Integer, List<Integer>> resultMap = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            int path = findMinHeightTrees(i, map, new HashSet<>(), 0);
-            List<Integer> nodes = resultMap.computeIfAbsent(path, t -> new ArrayList<>());
-            nodes.add(i);
-        }
-        for (int i = 0; i < n; i++) {
-            if (null != resultMap.get(i)) {
-                return resultMap.get(i);
+        Queue<Integer> queue = new LinkedList();
+        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                queue.add(entry.getKey());
             }
         }
-        return null;
+        while (map.size() > 2) {
+            List<Integer> listQueue = new ArrayList<>();
+            while (!queue.isEmpty()) {
+                Integer key = queue.poll();
+                Integer val = map.get(key).get(0);
+                map.remove(key);
+                List<Integer> list = map.get(val);
+                list.remove(key);
+                if (list.size() == 1) {
+                    listQueue.add(val);
+                }
+            }
+            for (Integer queue1 : listQueue) {
+                queue.add(queue1);
+            }
+        }
+        return new ArrayList<>(map.keySet());
     }
-
-    public Integer findMinHeightTrees(int val, Map<Integer, List<Integer>> map, Set<Integer> navigated, Integer pathCount) {
-        List<Integer> neighbors = map.get(val);
-        boolean leafNode = true;
-        for (Integer neighbor : neighbors) {
-            if (!navigated.contains(neighbor)) {
-                leafNode = false;
-            }
-        }
-        if (leafNode) {
-            return pathCount;
-        }
-        navigated.add(val);
-        Integer path = Integer.MIN_VALUE;
-        for (Integer neighbor : neighbors) {
-            if (!navigated.contains(neighbor)) {
-                int pathFound = findMinHeightTrees(neighbor, map, navigated, pathCount + 1);
-                path = Math.max(path, pathFound);
-            }
-        }
-        return path;
-    }
-
 }
